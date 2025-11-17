@@ -1,5 +1,8 @@
 # Файлы нетбинса:
 /nbproject/*
 
+
+/.vscode/*
+
 # Локальные настройи:
 config-local.php

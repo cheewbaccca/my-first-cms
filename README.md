@@ -20,6 +20,13 @@
         $CmsConfiguration["DB_PASSWORD"] = "1234"; // переопределяем пароль к базе данных
        ```
 
+В записимости от настроек, может потребовать переопределить также имя пользователя и имя базы данных:
+```php
+<?php
+$CmsConfiguration["DB_DSN"] = "mysql:host=localhost;dbname=mfc_base;charset=utf8;" ;
+$CmsConfiguration["DB_USERNAME"] = "myuser";
+$CmsConfiguration["DB_PASSWORD"] = "12345";
+```
    5) Следуем инструкциям http://fkn.ktu10.com/?q=node/9428
     
 
