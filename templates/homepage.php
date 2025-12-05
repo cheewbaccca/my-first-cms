@@ -26,7 +26,16 @@
                     </span>
                 <?php } ?>
             </h2>
-            <p class="summary"><?php echo htmlspecialchars($article->summary)?></p>
+            <p class="summary">
+                <?php 
+
+                $shortContent = mb_substr($article->content, 0, 50, 'UTF-8');
+                if (mb_strlen($article->content, 'UTF-8') > 50) {
+                    $shortContent .= '...';
+                }
+                echo htmlspecialchars($shortContent);
+                ?>
+            </p>
             <img id="loader-identity" src="JS/ajax-loader.gif" alt="gif">
             
             <ul class="ajax-load">

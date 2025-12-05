@@ -3,29 +3,17 @@
 //phpinfo(); die();
 
 require("config.php");
+$action = isset($_GET['action']) ? $_GET['action'] : "";
 
-try {
-    initApplication();
-} catch (Exception $e) { 
-    $results['errorMessage'] = $e->getMessage();
-    require(TEMPLATE_PATH . "/viewErrorPage.php");
-}
-
-
-function initApplication()
-{
-    $action = isset($_GET['action']) ? $_GET['action'] : "";
-
-    switch ($action) {
-        case 'archive':
-          archive();
-          break;
-        case 'viewArticle':
-          viewArticle();
-          break;
-        default:
-          homepage();
-    }
+switch ($action) {
+  case 'archive':
+    archive();
+    break;
+  case 'viewArticle':
+    viewArticle();
+    break;
+  default:
+    homepage();
 }
 
 function archive() 
@@ -36,7 +24,12 @@ function archive()
     
     $results['category'] = Category::getById( $categoryId );
     
-    $data = Article::getList( 100000, $results['category'] ? $results['category']->id : null );
+    /* ПР2 использовал $categoryId вместо 
+     * $results['category'] ? $results['category']->id : null
+     * потому что, на мой взгляд, это равнозначные значения.
+     */
+    
+    $data = Article::getList(100000, $categoryId, 1);
     
     $results['articles'] = $data['results'];
     $results['totalRows'] = $data['totalRows'];
@@ -67,13 +60,7 @@ function viewArticle()
     }
 
     $results = array();
-    $articleId = (int)$_GET["articleId"];
-    $results['article'] = Article::getById($articleId);
-    
-    if (!$results['article']) {
-        throw new Exception("Статья с id = $articleId не найдена");
-    }
-    
+    $results['article'] = Article::getById((int)$_GET["articleId"]);
     $results['category'] = Category::getById($results['article']->categoryId);
     $results['pageTitle'] = $results['article']->title . " | Простая CMS";
     
@@ -86,7 +73,7 @@ function viewArticle()
 function homepage() 
 {
     $results = array();
-    $data = Article::getList(HOMEPAGE_NUM_ARTICLES);
+    $data = Article::getList(HOMEPAGE_NUM_ARTICLES, null, 1);
     $results['articles'] = $data['results'];
     $results['totalRows'] = $data['totalRows'];
     
