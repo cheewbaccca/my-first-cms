@@ -11,6 +11,17 @@ CREATE TABLE articles
   PRIMARY KEY     (id)
 );
 
+DROP TABLE IF EXISTS users;
+CREATE TABLE users
+(
+  id              smallint unsigned NOT NULL auto_increment,
+  login           varchar(50) NOT NULL UNIQUE,
+  password        varchar(255) NOT NULL,
+  is_active       tinyint(1) NOT NULL DEFAULT 1,
+  
+  PRIMARY KEY     (id)
+);
+
 
 DROP TABLE IF EXISTS categories;
 CREATE TABLE categories
