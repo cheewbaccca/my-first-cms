@@ -42,6 +42,25 @@
               </li>
 
               <li>
+                <label for="subcategoryId">Article Subcategory</label>
+                <select name="subcategoryId" id="subcategoryId">
+                  <option value="">Select Subcategory (Optional)</option>
+                  <?php
+                  // Группируем подкатегории по категориям
+                  $groupedSubcategories = Subcategory::getListGroupedByCategory();
+                  foreach ($groupedSubcategories as $categoryName => $subcategories) {
+                      echo '<optgroup label="' . htmlspecialchars($categoryName) . '">';
+                      foreach ($subcategories as $subcategory) {
+                          $selected = ($subcategory->id == $results['article']->subcategoryId) ? 'selected' : '';
+                          echo '<option value="' . $subcategory->id . '" ' . $selected . ' data-category="' . $subcategory->categoryId . '">' . htmlspecialchars($subcategory->name) . '</option>';
+                      }
+                      echo '</optgroup>';
+                  }
+                  ?>
+                </select>
+              </li>
+
+              <li>
                 <label for="publicationDate">Publication Date</label>
                 <input type="date" name="publicationDate" id="publicationDate" placeholder="YYYY-MM-DD" required maxlength="10" value="<?php echo $results['article']->publicationDate ? date( "Y-m-d", $results['article']->publicationDate ) : "" ?>" />
               </li>

@@ -29,7 +29,10 @@ CREATE TABLE `articles` (
   `title` varchar(255) NOT NULL,
   `summary` text NOT NULL,
   `content` mediumtext NOT NULL,
-  PRIMARY KEY (`id`)
+  `subcategoryId` smallint(5) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_subcategory_id` (`subcategoryId`),
+  CONSTRAINT `fk_article_subcategory` FOREIGN KEY (`subcategoryId`) REFERENCES `subcategories` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

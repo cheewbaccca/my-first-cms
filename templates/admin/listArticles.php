@@ -17,6 +17,7 @@
               <th>Publication Date</th>
               <th>Article</th>
               <th>Category</th>
+              <th>Subcategory</th>
               <th>Active</th>
             </tr>
 
@@ -42,6 +43,14 @@
                 else {
                 echo "Без категории";
                 }?>
+              </td>
+              
+              <td>
+                  <?php if ($article->subcategoryId && isset($results['subcategories'][$article->subcategoryId])) { ?>
+                      <?php echo htmlspecialchars($results['subcategories'][$article->subcategoryId]->name) ?>
+                  <?php } else { ?>
+                      -
+                  <?php } ?>
               </td>
               
               <td>

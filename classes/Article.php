@@ -23,9 +23,14 @@ class Article
     public $title = null;
 
      /**
-    * @var int ID категории статьи
-    */
-    public $categoryId = null;
+     * @var int ID категории статьи
+     */
+     public $categoryId = null;
+     
+     /**
+     * @var int ID подкатегории статьи
+     */
+     public $subcategoryId = null;
 
     /**
     * @var string Краткое описание статьи
@@ -84,7 +89,11 @@ class Article
       }
       
       if (isset($data['categoryId'])) {
-          $this->categoryId = (int) $data['categoryId'];      
+          $this->categoryId = (int) $data['categoryId'];
+      }
+      
+      if (array_key_exists('subcategoryId', $data)) {
+          $this->subcategoryId = !is_null($data['subcategoryId']) ? (int) $data['subcategoryId'] : null;
       }
       
       if (isset($data['summary'])) {
@@ -226,10 +235,11 @@ class Article
 
         // Вставляем статью
         $conn = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
-        $sql = "INSERT INTO articles ( publicationDate, categoryId, title, summary, content, active ) VALUES ( FROM_UNIXTIME(:publicationDate), :categoryId, :title, :summary, :content, :active)";
+        $sql = "INSERT INTO articles ( publicationDate, categoryId, subcategoryId, title, summary, content, active ) VALUES ( FROM_UNIXTIME(:publicationDate), :categoryId, :subcategoryId, :title, :summary, :content, :active)";
         $st = $conn->prepare ( $sql );
         $st->bindValue( ":publicationDate", $this->publicationDate, PDO::PARAM_INT );
         $st->bindValue( ":categoryId", $this->categoryId, PDO::PARAM_INT );
+        $st->bindValue( ":subcategoryId", $this->subcategoryId, PDO::PARAM_INT );
         $st->bindValue( ":title", $this->title, PDO::PARAM_STR );
         $st->bindValue( ":summary", $this->summary, PDO::PARAM_STR );
         $st->bindValue( ":content", $this->content, PDO::PARAM_STR );
@@ -249,10 +259,11 @@ class Article
 
       // Обновляем статью
       $conn = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
-      $sql = "UPDATE articles SET publicationDate=FROM_UNIXTIME(:publicationDate), categoryId=:categoryId, title=:title, summary=:summary, content=:content, active=:active WHERE id = :id";
+      $sql = "UPDATE articles SET publicationDate=FROM_UNIXTIME(:publicationDate), categoryId=:categoryId, subcategoryId=:subcategoryId, title=:title, summary=:summary, content=:content, active=:active WHERE id = :id";
       $st = $conn->prepare ( $sql );
       $st->bindValue( ":publicationDate", $this->publicationDate, PDO::PARAM_INT );
       $st->bindValue( ":categoryId", $this->categoryId, PDO::PARAM_INT );
+      $st->bindValue( ":subcategoryId", $this->subcategoryId, PDO::PARAM_INT );
       $st->bindValue( ":title", $this->title, PDO::PARAM_STR );
       $st->bindValue( ":summary", $this->summary, PDO::PARAM_STR );
       $st->bindValue( ":content", $this->content, PDO::PARAM_STR );
@@ -260,7 +271,7 @@ class Article
       $st->bindValue(":active", $this->activeArticle, PDO::PARAM_INT);
       $st->execute();
       $conn = null;
-    }
+   }
 
 
     /**
